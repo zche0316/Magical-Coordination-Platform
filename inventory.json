@@ -1,42 +1,52 @@
 [
   {
-    "id": "17475593786477577",
-    "name": "fife",
-    "quantity": 4,
-    "category": "Herbs",
+    "id": "1",
+    "name": "Crystal Shard",
+    "quantity": 10,
+    "category": "Ingredients",
     "condition": "Stunning",
     "minStockLevel": 5,
-    "createdAt": "2025-05-18T09:09:38.647Z",
-    "updatedAt": "2025-05-18T09:09:38.647Z"
+    "createdAt": "2025-05-01T09:00:00.000Z",
+    "updatedAt": "2025-05-01T09:00:00.000Z"
   },
   {
-    "id": "17475594006557787",
-    "name": "f",
-    "quantity": 2,
+    "id": "2",
+    "name": "Elixir Vial",
+    "quantity": 3,
     "category": "Potions",
-    "condition": "Stunning",
-    "minStockLevel": 5,
-    "createdAt": "2025-05-18T09:10:00.655Z",
-    "updatedAt": "2025-05-19T07:41:15.717Z"
-  },
-  {
-    "id": "17475594245114463",
-    "name": "fff",
-    "quantity": 1111,
-    "category": "Potions",
-    "condition": "Stunning",
-    "minStockLevel": 5,
-    "createdAt": "2025-05-18T09:10:24.511Z",
-    "updatedAt": "2025-05-18T09:10:24.511Z"
-  },
-  {
-    "id": "17475596373596306",
-    "name": "FFF",
-    "quantity": 4,
-    "category": "Artifacts",
     "condition": "Radiant",
     "minStockLevel": 5,
-    "createdAt": "2025-05-18T09:13:57.359Z",
-    "updatedAt": "2025-05-18T09:13:57.359Z"
+    "createdAt": "2025-05-02T10:00:00.000Z",
+    "updatedAt": "2025-05-02T10:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "name": "Lunar Mushrooms",
+    "quantity": 50,
+    "category": "Ingredients",
+    "condition": "Stable",
+    "minStockLevel": 5,
+    "createdAt": "2025-05-03T11:00:00.000Z",
+    "updatedAt": "2025-05-03T11:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "name": "Crystal Vials",
+    "quantity": 50,
+    "category": "Potions",
+    "condition": "Stable",
+    "minStockLevel": 5,
+    "createdAt": "2025-05-04T12:00:00.000Z",
+    "updatedAt": "2025-05-04T12:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "name": "Moonstone Powder",
+    "quantity": "10g",
+    "category": "Ingredients",
+    "condition": "Dormant",
+    "minStockLevel": 5,
+    "createdAt": "2025-05-05T13:00:00.000Z",
+    "updatedAt": "2025-05-05T13:00:00.000Z"
   }
 ]

@@ -3,38 +3,37 @@
     "id": "elixir",
     "title": "Elixir of Night Vision",
     "start": "2025-05-07T00:00:00Z",
-    "organiser": "Emma Watson",
+    "organiser": "Emma",
     "category": "Potion Brewing",
     "status": "Completed",
     "participants": [
-      "Emma Watson",
-      "Harry Potter",
-      "Hermione Granger"
+      "Emma",
+      "Yu"
     ]
   },
   {
     "id": "crystal-ball-divination",
     "title": "Crystal Ball Divination",
-    "start": "2025-06-10T14:00:00Z",
-    "organiser": "Barnabas the Bold",
+    "start": "2025-05-10T14:00:00Z",
+    "organiser": "Emma",
     "category": "Divination",
     "status": "Completed",
     "participants": [
-      "Barnabas the Bold",
-      "Celeste Stargazer"
+      "Carlos",
+      "Aisha"
     ]
   },
   {
     "id": "phoenix-summoning",
     "title": "Phoenix Summoning Ceremony",
     "start": "2025-05-20T09:30:00Z",
-    "organiser": "Albus Dumbledore",
+    "organiser": "Emma",
     "category": "Summoning",
     "status": "Completed",
     "participants": [
-      "Albus Dumbledore",
-      "Fawkes",
-      "Harry Potter"
+      "Emma",
+      "Aisha",
+      "Carlos"
     ]
   }
 ]
