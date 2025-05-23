@@ -1,3 +1,4 @@
+
 // server.js
 const express = require('express');
 const fs      = require('fs');
@@ -405,7 +406,7 @@ app.post('/login', (req, res) => {
     const user = users.find(u => u.username === username && u.password === password && u.role === role);
 
     if (!user) {
-      return res.send('❌ Invalid credentials. <a href="/login.html">Try again</a>');
+      return res.send('❌ Invalid credentials. <a href="/index.html">Try again</a>');
     }
 
     switch (role) {
@@ -442,7 +443,7 @@ app.post('/register', (req, res) => {
     users.push({ username, password, role });
     fs.writeFileSync(USERS_PATH, JSON.stringify(users, null, 2), 'utf8');
 
-    return res.redirect('/login.html');
+    return res.redirect('/index.html');
   } catch (err) {
     console.error('Register error:', err);
     return res.status(500).send('Server error during registration.');
@@ -450,5 +451,5 @@ app.post('/register', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}/login.html`);
+  console.log(`Server running at http://localhost:${PORT}/index.html`);
 });

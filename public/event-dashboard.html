@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+
+  <title>Event Dashboard - Mystical Events</title>
+  <style>
+    body { 
+      font-family: 'Georgia', serif; 
+      background-color: #f2f0e6; 
+      color: #2f2f2f; 
+      margin: 0; 
+      padding: 0;
+      line-height: 1.6;
+    }
+    
+    .navbar { 
+      background: #5b3e1d; 
+      padding: 1rem 2rem; 
+      color: #fff; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nav-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    
+    .logout-btn {
+      background: #dc3545;
+      border: none; 
+      padding: 8px 16px; 
+      border-radius: 6px; 
+      color: #fff; 
+      cursor: pointer;
+      font-size: 0.95em;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      width: auto;
+    }
+    
+    .logout-btn:hover {
+      background: #c82333;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    }
+    
+    .container { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 30px; 
+    }
+    
+    h1 { 
+      text-align: center; 
+      font-size: 2.2em; 
+      color: #5b3e1d; 
+      margin: 30px 0 40px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #d6c7a1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .filters-container { 
+      display: flex; 
+      justify-content: center; 
+      margin-bottom: 30px; 
+    }
+    
+    .filters { 
+      display: flex; 
+      gap: 1rem; 
+      flex-wrap: wrap; 
+      justify-content: center; 
+      background-color: #fff9ec; 
+      border: 1px solid #d6c7a1; 
+      border-radius: 8px; 
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    select, input { 
+      padding: 10px 14px; 
+      font-size: 1em; 
+      border: 1px solid #d6c7a1; 
+      border-radius: 6px; 
+      background: #fff;
+      transition: all 0.2s ease;
+      min-width: 200px;
+    }
+    
+    select:focus, input:focus {
+      outline: none;
+      border-color: #5b3e1d;
+      box-shadow: 0 0 0 2px rgba(91, 62, 29, 0.1);
+    }
+    
+    .event-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+      gap: 25px; 
+    }
+    
+    .event-card { 
+      background-color: #fff9ec; 
+      border: 1px solid #d6c7a1; 
+      border-radius: 8px; 
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .event-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+    
+    .event-card h3 { 
+      margin: 0 0 15px; 
+      color: #3c2a13;
+      font-size: 1.3em;
+    }
+    
+    .badge { 
+      display: inline-block; 
+      padding: 6px 12px; 
+      font-size: 0.85em; 
+      border-radius: 15px; 
+      margin-bottom: 12px; 
+      color: white;
+      font-weight: 500;
+    }
+    
+    .scheduled { background-color: #6c757d; }
+    .in-progress { background-color: #007bff; }
+    .completed { background-color: #28a745; }
+    
+    .countdown { 
+      font-size: 0.95em; 
+      color: #884400; 
+      margin: 15px 0 0;
+      padding-top: 10px;
+      border-top: 1px dashed #d6c7a1;
+    }
+    
+    button { 
+      background-color: #5b3e1d; 
+      color: white; 
+      padding: 12px 20px; 
+      border: none; 
+      border-radius: 6px; 
+      margin-top: 15px; 
+      cursor: pointer; 
+      width: 100%;
+      transition: all 0.2s ease;
+      font-size: 0.95em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    button:hover { 
+      background-color: #7a4e20; 
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+  </style>
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Junior Wizard') {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body>
+  <div class="navbar">
+    <div class="nav-title">Event Dashboard</div>
+    <button class="logout-btn" onclick="localStorage.clear();location.href='login.html'">🚪 Logout</button>
+  </div>
+  <div class="container">
+    <h1>🔮 Explore Magical Events</h1>
+    <div class="filters-container">
+      <div class="filters">
+        <label>
+          <select><option>All Categories</option><option>Summoning</option><option>Divination</option><option>Enchantment</option><option>Potion Brewing</option></select>
+        </label>
+        <label>
+          <select><option>All Status</option><option>Scheduled</option><option>In Progress</option><option>Completed</option></select>
+        </label>
+        <label>
+          <input type="text" placeholder="Search by location...">
+        </label>
+      </div>
+    </div>
+    <div class="event-grid"></div>
+  </div>
+  <script>
+
+    async function loadEvents() {
+      const grid = document.querySelector('.event-grid');
+      grid.innerHTML = '';
+      const resp   = await fetch('/api/events');
+      const events = await resp.json();
+      const now = Date.now();
+
+      const categorySelect = document.querySelectorAll('.filters select')[0];
+      const selectedCategory = categorySelect.value;
+
+      const statusSelect = document.querySelectorAll('.filters select')[1];
+      const selectedStatus = statusSelect.value;
+
+      const locationInput = document.querySelector('.filters input');
+      const locationKeyword = locationInput.value.trim().toLowerCase();
+
+      let futureEvents = events.filter(ev => new Date(ev.start).getTime() > now);
+
+      if (selectedCategory && selectedCategory !== 'All Categories') {
+        futureEvents = futureEvents.filter(ev => ev.category && ev.category.toLowerCase() === selectedCategory.toLowerCase());
+      }
+      if (selectedStatus && selectedStatus !== 'All Status') {
+        futureEvents = futureEvents.filter(ev => ev.status && ev.status.toLowerCase() === selectedStatus.toLowerCase());
+      }
+      if (locationKeyword) {
+        futureEvents = futureEvents.filter(ev => ev.location && ev.location.toLowerCase().includes(locationKeyword));
+      }
+
+      futureEvents = futureEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+      futureEvents.forEach(ev => {
+        const card = document.createElement('div');
+        card.className = 'event-card';
+
+        const badge = document.createElement('span');
+        badge.className = 'badge ' + ev.status.toLowerCase().replace(' ', '-');
+        badge.textContent = ev.status;
+        card.appendChild(badge);
+
+        const h3 = document.createElement('h3');
+        h3.textContent = ev.title;
+        card.appendChild(h3);
+
+        [['Category', ev.category], ['Location', ev.location]].forEach(([lab, val]) => {
+          const p = document.createElement('p');
+          p.innerHTML = `<strong>${lab}:</strong> ${val}`;
+          card.appendChild(p);
+        });
+
+        const startDate = new Date(ev.start);
+        const pStart = document.createElement('p');
+        pStart.innerHTML = `<strong>Start:</strong> ${startDate.toLocaleString()}`;
+        card.appendChild(pStart);
+
+        const pDur = document.createElement('p');
+        pDur.innerHTML = `<strong>Duration:</strong> ${ev.duration} mins`;
+        card.appendChild(pDur);
+
+        const pCount = document.createElement('p');
+        pCount.className = 'countdown';
+        if (now < startDate.getTime()) {
+          const days = Math.floor((startDate - now) / (1000*60*60*24));
+          pCount.textContent = `⏳ Starts in ${days} day${days !== 1 ? 's' : ''}`;
+        } else if (now <= startDate.getTime() + ev.duration*60000) {
+          pCount.textContent = '🧿 Live Now';
+        } else {
+          pCount.textContent = '✅ Finished';
+        }
+        card.appendChild(pCount);
+
+        grid.appendChild(card);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.filters select').forEach(sel => sel.addEventListener('change', loadEvents));
+      document.querySelector('.filters input').addEventListener('input', loadEvents);
+      loadEvents();
+      window.addEventListener('storage', e => {
+        if (e.key === 'eventsUpdated') {
+          loadEvents();
+        }
+      });
+    });
+
+    
+  </script>
+</body>
+</html>

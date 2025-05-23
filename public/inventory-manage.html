@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Inventory - Mystical Events</title>
+  <style>
+    body { 
+      font-family: 'Georgia', serif; 
+      background: #f2f0e6; 
+      color: #2f2f2f; 
+      margin: 0; 
+      padding: 0; 
+    }
+    .navbar { 
+      background: #5b3e1d; 
+      padding: 1rem 2rem; 
+      color: #fff; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nav-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    
+    .back-btn {
+      background: #6c757d;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .back-btn:hover {
+      background: #5a6268;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #5b3e1d;
+      margin-top: 0;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #d6c7a1;
+    }
+
+    form {
+      background: #fff9ec;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #d6c7a1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #3c2a13;
+      font-weight: 500;
+    }
+
+    input, select {
+      width: calc(100% - 24px);
+      padding: 8px 12px;
+      border: 1px solid #d6c7a1;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 1em;
+      background: white;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #5b3e1d;
+      box-shadow: 0 0 0 2px rgba(91, 62, 29, 0.2);
+    }
+
+    input:disabled, select:disabled {
+      background: #f2f0e6;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    button[type="submit"] {
+      background: #5b3e1d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      width: 100%;
+      margin-top: 10px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"]:hover {
+      background: #7a4e20;
+      transform: translateY(-1px);
+    }
+
+    .edit-mode-notice {
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+  </style>
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Inventory Manager') {
+      window.location.href = 'index.html';
+    }
+  </script>
+</head>
+<body>
+  <div class="navbar">
+    <div class="nav-title">Manage Inventory</div>
+    <button class="back-btn" onclick="localStorage.clear();location.href='index.html'">
+      ← Back to Dashboard
+    </button>
+  </div>
+
+  <div class="container">
+    <div class="edit-mode-notice" id="editNotice">
+      ⚠️ Edit Mode: You can only modify the quantity and magical condition of existing items.
+    </div>
+
+    <h1 id="pageTitle">✨ Add New Item</h1>
+
+    <form id="inventoryForm" action="/im/manage" method="POST">
+      <input type="hidden" id="itemId" name="id">
+      
+      <div class="form-group">
+        <label for="itemName">Item Name</label>
+        <input type="text" id="itemName" name="itemName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">Select a category</option>
+          <option value="Potions">Potions</option>
+          <option value="Crystals">Crystals</option>
+          <option value="Herbs">Herbs</option>
+          <option value="Books">Books</option>
+          <option value="Artifacts">Artifacts</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" name="quantity" min="0" required>
+      </div>
+
+      <div class="form-group">
+        <label for="condition">Magical Condition</label>
+        <select id="condition" name="condition" required>
+          <option value="">Select condition</option>
+          <option value="Stunning">Stunning (Perfect Power)</option>
+          <option value="Radiant">Radiant (Strong Energy)</option>
+          <option value="Stable">Stable (Normal Power)</option>
+          <option value="Fading">Fading (Weakening)</option>
+          <option value="Dormant">Dormant (Needs Recharge)</option>
+        </select>
+      </div>
+
+      <button type="submit">Save Item</button>
+    </form>
+  </div>
+
+  <script>
+    // Check if we're in edit mode
+    const params = new URLSearchParams(window.location.search);
+    const itemId = params.get('id');
+    const isEditMode = !!itemId;
+
+    if (isEditMode) {
+      document.getElementById('pageTitle').textContent = '✏️ Edit Item';
+      document.getElementById('editNotice').classList.add('show');
+      document.getElementById('itemId').value = itemId;
+
+      // Fetch item details
+      fetch(`/im/items`)
+        .then(response => response.json())
+        .then(items => {
+          const item = items.find(i => i.id === itemId);
+          if (item) {
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemName').disabled = true;
+            document.getElementById('category').value = item.category;
+            document.getElementById('category').disabled = true;
+            document.getElementById('quantity').value = item.quantity;
+            document.getElementById('condition').value = item.condition || '';
+          } else {
+            alert('Item not found');
+            window.location.href = 'inventory-dashboard.html';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching item:', error);
+          alert('Failed to load item details');
+        });
+    }
+
+    // Form submission
+    document.getElementById('inventoryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      try {
+        const response = await fetch('/im/manage', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            id: document.getElementById('itemId').value,
+            itemName: document.getElementById('itemName').value,
+            category: document.getElementById('category').value,
+            quantity: parseInt(document.getElementById('quantity').value),
+            condition: document.getElementById('condition').value
+          })
+        });
+
+        if (response.ok) {
+          window.location.href = 'inventory-dashboard.html';
+        } else {
+          const errorData = await response.json();
+          alert(errorData.error || 'Failed to save item');
+        }
+      } catch (error) {
+        console.error('Error saving item:', error);
+        alert('Failed to save item');
+      }
+    });
+  </script>
+</body>
+</html> 
