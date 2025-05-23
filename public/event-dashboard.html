@@ -178,14 +178,14 @@
   </style>
   <script>
     if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Junior Wizard') {
-      window.location.href = 'index.html';
+      window.location.href = 'login.html';
     }
   </script>
 </head>
 <body>
 <div class="navbar">
   <div class="nav-title">Event Dashboard</div>
-  <button class="logout-btn" onclick="localStorage.clear();location.href='index.html'">🚪 Logout</button>
+  <button class="logout-btn" onclick="localStorage.clear();location.href='login.html'">🚪 Logout</button>
 </div>
 <div class="container">
   <h1>🔮 Explore Magical Events</h1>
@@ -222,13 +222,25 @@
     const locationInput = document.querySelector('.filters input');
     const locationKeyword = locationInput.value.trim().toLowerCase();
 
-    let filteredEvents = events;
+    let filteredEvents = events.map(ev => {
+      const start = new Date(ev.start).getTime();
+      const end = start + ev.duration * 60000;
+      let dynamicStatus;
+      if (now < start) {
+        dynamicStatus = 'Scheduled';
+      } else if (now <= end) {
+        dynamicStatus = 'In Progress';
+      } else {
+        dynamicStatus = 'Completed';
+      }
+      return { ...ev, dynamicStatus };
+    });
 
     if (selectedCategory && selectedCategory !== 'All Categories') {
       filteredEvents = filteredEvents.filter(ev => ev.category && ev.category.toLowerCase() === selectedCategory.toLowerCase());
     }
     if (selectedStatus && selectedStatus !== 'All Status') {
-      filteredEvents = filteredEvents.filter(ev => ev.status && ev.status.toLowerCase() === selectedStatus.toLowerCase());
+      filteredEvents = filteredEvents.filter(ev => ev.dynamicStatus && ev.dynamicStatus.toLowerCase() === selectedStatus.toLowerCase());
     }
     if (locationKeyword) {
       filteredEvents = filteredEvents.filter(ev => ev.location && ev.location.toLowerCase().includes(locationKeyword));
@@ -241,8 +253,8 @@
       card.className = 'event-card';
 
       const badge = document.createElement('span');
-      badge.className = 'badge ' + ev.status.toLowerCase().replace(' ', '-');
-      badge.textContent = ev.status;
+      badge.className = 'badge ' + ev.dynamicStatus.toLowerCase().replace(' ', '-');
+      badge.textContent = ev.dynamicStatus;
       card.appendChild(badge);
 
       const h3 = document.createElement('h3');
