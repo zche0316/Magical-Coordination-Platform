@@ -1,27 +1,22 @@
 [
   {
-    "username": "seniorwizard",
-    "password": "123",
-    "role": "Senior Wizard"
-  },
-  {
-    "username": "juniorwizard",
-    "password": "456",
-    "role": "Junior Wizard"
-  },
-  {
-    "username": "im",
-    "password": "hehehe",
-    "role": "Inventory Manager"
-  },
-  {
-    "username": "elly",
+    "username": "emma",
     "password": "123456",
     "role": "Senior Wizard"
   },
   {
-    "username": "mike",
-    "password": "233333",
+    "username": "yu",
+    "password": "123456",
+    "role": "Junior Wizard"
+  },
+  {
+    "username": "aisha",
+    "password": "123456",
+    "role": "Inventory Manager"
+  },
+  {
+    "username": "carlos",
+    "password": "123456",
     "role": "Magical Analyst"
   }
 ]
