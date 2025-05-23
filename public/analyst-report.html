@@ -117,13 +117,11 @@
     }
     .btn:hover { background: #7a4e20; transform: translateY(-1px); }
   </style>
-  <!-- 外部库：Chart.js 和 html2pdf.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 </head>
 <body>
   <script>
-    // 登录检查
     if (localStorage.getItem('isLoggedIn') !== 'true'
         || localStorage.getItem('role') !== 'Magical Analyst') {
       window.location.href = 'index.html';
@@ -166,7 +164,7 @@
     <div class="sidebar">
       <div class="section">
         <h3>Visual Analysis</h3>
-        <select id="chartSelect" onchange="showChart()">
+        <label for="chartSelect"></label><select id="chartSelect" onchange="showChart()">
           <option value="">-- Choose Chart --</option>
           <option value="success">Success Rate</option>
           <option value="resources">Resource Usage</option>
