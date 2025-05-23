@@ -12,12 +12,12 @@
   {
     "id": "2",
     "name": "Elixir Vial",
-    "quantity": 3,
+    "quantity": 2,
     "category": "Potions",
     "condition": "Radiant",
     "minStockLevel": 5,
     "createdAt": "2025-05-02T10:00:00.000Z",
-    "updatedAt": "2025-05-02T10:00:00.000Z"
+    "updatedAt": "2025-05-23T16:09:23.146Z"
   },
   {
     "id": "3",
