@@ -229,7 +229,7 @@
   </style>
   <script>
     if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Inventory Manager') {
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     }
   </script>
 </head>
@@ -243,7 +243,7 @@
       </button>
     </div>
     <div class="nav-menu">
-      <button class="logout-btn" onclick="localStorage.clear();location.href='login.html'">🚪 Logout</button>
+      <button class="logout-btn" onclick="localStorage.clear();location.href='index.html'">🚪 Logout</button>
     </div>
   </div>
   <div class="container">

@@ -96,14 +96,14 @@
   </style>
   <script>
     if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Senior Wizard') {
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     }
   </script>
 </head>
 <body>
   <div class="navbar">
     <div class="nav-title">Events Scheduler</div>
-    <button class="back-btn" id="btn-back-top" onclick="localStorage.clear();location.href='login.html'">
+    <button class="back-btn" id="btn-back-top" onclick="localStorage.clear();location.href='index.html'">
       ← Back to Senior Wizard Dashboard
     </button>
   </div>

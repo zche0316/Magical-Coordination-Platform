@@ -91,14 +91,14 @@
   </style>
   <script>
     if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Inventory Manager') {
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     }
   </script>
 </head>
 <body>
   <div class="navbar">
     <div class="nav-title">Change Log</div>
-    <button class="back-btn" onclick="localStorage.clear();location.href='login.html'">
+    <button class="back-btn" onclick="localStorage.clear();location.href='index.html'">
       ← Back to Dashboard
     </button>
   </div>

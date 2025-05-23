@@ -38,7 +38,7 @@
   </style>
   <script>
     if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Senior Wizard') {
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     }
 
   </script>
@@ -46,7 +46,7 @@
 <body>
   <div class="navbar">
     <div class="nav-title">🧙‍♂️ Spellcasting and Ritual Panel</div>
-    <button class="logout-btn" onclick="localStorage.clear();location.href='login.html'">🚪 Logout</button>
+    <button class="logout-btn" onclick="localStorage.clear();location.href='index.html'">🚪 Logout</button>
   </div>
 
   <div class="layout">

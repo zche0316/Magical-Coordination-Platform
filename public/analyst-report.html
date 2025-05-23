@@ -126,7 +126,7 @@
     // 登录检查
     if (localStorage.getItem('isLoggedIn') !== 'true'
         || localStorage.getItem('role') !== 'Magical Analyst') {
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     }
   </script>
 
@@ -257,11 +257,9 @@
     let chart;
 
     document.addEventListener('DOMContentLoaded', () => {
-      // 解析 URL 参数
       const params = new URLSearchParams(window.location.search);
       const id = params.get('event');
 
-      // 读取内嵌 JSON
       const reports = JSON.parse(document.getElementById('reportData').textContent);
       report = reports.find(r => r.id === id);
       if (!report) {
@@ -269,17 +267,14 @@
         return;
       }
 
-      // 填充标题
       document.getElementById('reportTitle').textContent = report.title + ': Report';
 
-      // 填充 Outcome Summary
       const dateStr = new Date(report.start).toLocaleDateString('en-US', {
         year:'numeric', month:'short', day:'numeric'
       });
       document.getElementById('outcomeText').textContent =
         `The ${report.title} session took place on ${dateStr} and achieved a ${report.metrics['Success Rate'] || report.metrics['Accuracy Rate']}% success rate.`;
 
-      // 填充 Key Findings
       const findingsBody = document.querySelector('#keyFindingsTable tbody');
       Object.entries(report.metrics).forEach(([metric, value]) => {
         const tr = document.createElement('tr');
@@ -287,7 +282,6 @@
         findingsBody.appendChild(tr);
       });
 
-      // 填充 Resource Utilization
       const resBody = document.querySelector('#resourceTable tbody');
       report.resources.forEach(r => {
         const tr = document.createElement('tr');
@@ -295,7 +289,7 @@
         resBody.appendChild(tr);
       });
 
-      // 导出按钮绑定
+
       document.getElementById('csvBtn').addEventListener('click', downloadCSV);
       document.getElementById('pdfBtn').addEventListener('click', downloadPDF);
     });
