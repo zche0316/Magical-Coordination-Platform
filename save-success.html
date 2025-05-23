@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Saved</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+    .box {
+      background: #fff;
+      padding: 2rem 3rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .box h1 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    .box button {
+      margin: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #5b3e1d;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .box button:hover {
+      background: #7a4e20;
+    }
+  </style>
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Senior Wizard') {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body>
+  <div class="box">
+    <h1>✓ Event Saved Successfully!</h1>
+    <button onclick="location.href='senior-dashboard.html'">
+      View SW Dashboard
+    </button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <script src="crash-logger.js"></script>
+
+  <title>Delete Events</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #f2f0e6;
+      color: #2f2f2f;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    .navbar {
+      background-color: #5b3e1d;
+      padding: 1rem 2rem;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .brand-title {
+      font-size: 1.3em;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+    .logout-btn {
+      background-color: #dc3545;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .logout-btn:hover {
+      background-color: #c82333;
+    }
+    .layout {
+      display: flex;
+      height: calc(100vh - 64px);
+    }
+    .sidebar {
+      width: 200px;
+      background: #f2f0e6;
+      padding: 1.5rem 0;
+      border-right: 1px solid #d6c7a1;
+    }
+    .sidebar-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      color: #3c2a13;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .sidebar-menu a:hover {
+      background: #f0e4c0;
+      padding-left: 25px;
+    }
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      background: #f2f0e6;
+      overflow-y: auto;
+    }
+    .calendar {
+      background: #fff9ec;
+      padding: 1.5rem;
+      border: 1px solid #d6c7a1;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      max-width: 600px;
+      margin: auto;
+    }
+    .calendar h3 {
+      margin: 0 0 1rem;
+      color: #5b3e1d;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #d6c7a1;
+      padding-bottom: 8px;
+    }
+    .delete-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .delete-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #d6c7a1;
+    }
+    .delete-btn {
+      background: #dc3545;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .delete-btn:hover {
+      background: #c82333;
+    }
+  </style>
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Senior Wizard') {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+<body>
+  <div class="navbar">
+    <div class="brand-title">🧙‍♂️ Spellcasting and Ritual Panel</div>
+    <button class="logout-btn" onclick="localStorage.clear();location.href='login.html'">🚪 Logout</button>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="senior-dashboard.html">🗓️ Upcoming Events</a></li>
+        <li><a href="senior-schedule.html">📝 Create Event</a></li>
+        <li><a href="edit-event.html">🪄 Edit Event</a></li>
+        <li><a href="delete-event.html" id="link-delete">🗑️ Delete Event</a></li>
+        <li><a href="history.html">📚 Event History</a></li>
+        <li><a href="draft-box.html">📦 Draft Box</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="calendar">
+        <h3>🗑️ Delete Events</h3>
+        <ul class="delete-list"></ul>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const list = document.querySelector('.delete-list');
+      // Load events and render delete list
+      const resp = await fetch('/api/events');
+      const events = await resp.json();
+      events.sort((a,b) => new Date(a.start) - new Date(b.start))
+            .forEach(ev => {
+              const d = new Date(ev.start);
+              const li = document.createElement('li');
+              li.innerHTML = `
+                <span>${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${ev.title}</span>
+                <button class="delete-btn" data-id="${ev.id}">Delete</button>
+              `;
+              list.appendChild(li);
+            });
+
+      // Bind delete actions
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('Confirm delete this event?')) return;
+          const res = await fetch(`/api/events/${btn.dataset.id}`, { method: 'DELETE' });
+          if (res.ok) {
+            btn.parentElement.remove();
+          } else {
+            const err = await res.json().catch(() => ({}));
+            alert('Delete failed: ' + (err.error || res.statusText));
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

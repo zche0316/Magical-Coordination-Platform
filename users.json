@@ -1,0 +1,27 @@
+[
+  {
+    "username": "seniorwizard",
+    "password": "123",
+    "role": "Senior Wizard"
+  },
+  {
+    "username": "juniorwizard",
+    "password": "456",
+    "role": "Junior Wizard"
+  },
+  {
+    "username": "im",
+    "password": "hehehe",
+    "role": "Inventory Manager"
+  },
+  {
+    "username": "elly",
+    "password": "123456",
+    "role": "Senior Wizard"
+  },
+  {
+    "username": "mike",
+    "password": "233333",
+    "role": "Magical Analyst"
+  }
+]

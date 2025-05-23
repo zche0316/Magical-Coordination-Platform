@@ -1,0 +1,30 @@
+[
+  {
+    "origin": "inventory-manage",
+    "message": "Item quantity updated successfully: f (2 → 24)",
+    "time": "2025-05-19T07:39:05.148Z"
+  },
+  {
+    "origin": "inventory-manage",
+    "message": "Item quantity updated successfully: f (24 → 3)",
+    "time": "2025-05-19T07:39:17.206Z"
+  },
+  {
+    "origin": "inventory-alert",
+    "message": "⚠️ Low stock alert: f (Current: 2, Minimum: 5)",
+    "time": "2025-05-19T07:41:15.717Z"
+  },
+  {
+    "origin": "inventory-alert",
+    "message": "⚠️ Low stock alert: f (Current: 3, Minimum: 5)",
+    "time": "2025-05-19T07:39:17.205Z"
+  },
+  {
+    "origin": "inventory-manage",
+    "message": "Item quantity updated successfully: f (3 → 2)",
+    "time": "2025-05-19T07:41:15.718Z"
+  },
+  {
+    "id": "1747713902754"
+  }
+]

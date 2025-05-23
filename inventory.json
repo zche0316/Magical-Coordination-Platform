@@ -1,0 +1,42 @@
+[
+  {
+    "id": "17475593786477577",
+    "name": "fife",
+    "quantity": 4,
+    "category": "Herbs",
+    "condition": "Stunning",
+    "minStockLevel": 5,
+    "createdAt": "2025-05-18T09:09:38.647Z",
+    "updatedAt": "2025-05-18T09:09:38.647Z"
+  },
+  {
+    "id": "17475594006557787",
+    "name": "f",
+    "quantity": 2,
+    "category": "Potions",
+    "condition": "Stunning",
+    "minStockLevel": 5,
+    "createdAt": "2025-05-18T09:10:00.655Z",
+    "updatedAt": "2025-05-19T07:41:15.717Z"
+  },
+  {
+    "id": "17475594245114463",
+    "name": "fff",
+    "quantity": 1111,
+    "category": "Potions",
+    "condition": "Stunning",
+    "minStockLevel": 5,
+    "createdAt": "2025-05-18T09:10:24.511Z",
+    "updatedAt": "2025-05-18T09:10:24.511Z"
+  },
+  {
+    "id": "17475596373596306",
+    "name": "FFF",
+    "quantity": 4,
+    "category": "Artifacts",
+    "condition": "Radiant",
+    "minStockLevel": 5,
+    "createdAt": "2025-05-18T09:13:57.359Z",
+    "updatedAt": "2025-05-18T09:13:57.359Z"
+  }
+]
