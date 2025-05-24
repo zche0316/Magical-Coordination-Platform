@@ -33,8 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/api/crash', (req,res) => {
   try {
     let logs = fs.existsSync(CRASH_LOG)
-             ? JSON.parse(fs.readFileSync(CRASH_LOG,'utf8'))
-             : [];
+        ? JSON.parse(fs.readFileSync(CRASH_LOG,'utf8'))
+        : [];
     logs.push({ ...req.body, id: Date.now().toString() });
     fs.writeFileSync(CRASH_LOG, JSON.stringify(logs,null,2),'utf8');
   } catch(e) { console.error('Crash log error:', e); }
@@ -56,19 +56,22 @@ app.get('/api/events', (_req,res) => {
 app.post('/api/events', (req,res) => {
   try {
     const events = JSON.parse(fs.readFileSync(JSON_PATH,'utf8'));
-    const { start, duration, status } = req.body;
+    const { start, duration, status, organiser, participants } = req.body;
     if (status === 'Scheduled') {
       const newStart = new Date(start);
       const newEnd   = new Date(newStart.getTime() + duration*60000);
       const conflict = events
-        .filter(e => e.status==='Scheduled')
-        .some(ev => {
-          const s = new Date(ev.start);
-          const e = new Date(s.getTime() + ev.duration*60000);
-          return newStart < e && newEnd > s;
-        });
+          .filter(e => e.status==='Scheduled')
+          .some(ev => {
+            const s = new Date(ev.start);
+            const e = new Date(s.getTime() + ev.duration*60000);
+            if (newStart >= e || newEnd <= s) return false;
+            if (ev.organiser === organiser) return true;
+            return !!(Array.isArray(ev.participants) && participants.some(p => ev.participants.includes(p)));
+
+          });
       if (conflict) {
-        return res.status(409).json({ error:'Event time conflict.' });
+        return res.status(409).json({ error:'Conflict: The organizer or participant has already made a schedule at the same time' });
       }
     }
     const newEvent = { ...req.body, id: Date.now().toString()+Math.floor(Math.random()*10000) };
@@ -88,19 +91,22 @@ app.put('/api/events/:id', (req,res) => {
     const idx = events.findIndex(e => e.id === req.params.id);
     if (idx<0) return res.status(404).json({ error:'Event not found' });
 
-    const { start, duration, status } = req.body;
+    const { start, duration, status, organiser, participants } = req.body;
     if (status==='Scheduled') {
       const newStart = new Date(start);
       const newEnd   = new Date(newStart.getTime()+duration*60000);
       const conflict = events
-        .filter(e=>e.status==='Scheduled' && e.id!==req.params.id)
-        .some(ev => {
-          const s = new Date(ev.start);
-          const e = new Date(s.getTime()+ev.duration*60000);
-          return newStart<e && newEnd>s;
-        });
+          .filter(e=>e.status==='Scheduled' && e.id!==req.params.id)
+          .some(ev => {
+            const s = new Date(ev.start);
+            const e = new Date(s.getTime()+ev.duration*60000);
+            if (newStart>=e || newEnd<=s) return false;
+            if (ev.organiser === organiser) return true;
+            return !!(Array.isArray(ev.participants) && participants.some(p => ev.participants.includes(p)));
+
+          });
       if (conflict) {
-        return res.status(409).json({ error:'Event time conflict.' });
+        return res.status(409).json({ error:'Conflict: The organizer or participant has already made a schedule at the same time' });
       }
     }
 
@@ -133,8 +139,8 @@ app.delete('/api/events/:id', (req,res) => {
 process.on('uncaughtException', err => {
   try {
     let logs = fs.existsSync(CRASH_LOG)
-             ? JSON.parse(fs.readFileSync(CRASH_LOG,'utf8'))
-             : [];
+        ? JSON.parse(fs.readFileSync(CRASH_LOG,'utf8'))
+        : [];
     logs.push({ origin:'uncaughtException', message:err.message, stack:err.stack, time:new Date().toISOString() });
     fs.writeFileSync(CRASH_LOG, JSON.stringify(logs,null,2),'utf8');
   } catch(e) {
@@ -160,7 +166,7 @@ app.post('/im/manage', (req, res) => {
 
       const existingItem = inventory[existingItemIndex];
       const newQuantity = parseInt(req.body.quantity);
-      
+
       inventory[existingItemIndex] = {
         ...existingItem,
         quantity: newQuantity,
@@ -176,7 +182,7 @@ app.post('/im/manage', (req, res) => {
           message: `⚠️ Low stock alert: ${existingItem.name} (Current: ${newQuantity}, Minimum: 5)`,
           time: new Date().toISOString()
         };
-        
+
         let logs = [];
         if (fs.existsSync(CRASH_LOG)) {
           logs = JSON.parse(fs.readFileSync(CRASH_LOG, 'utf8'));
@@ -193,7 +199,7 @@ app.post('/im/manage', (req, res) => {
         message: `Item quantity updated successfully: ${existingItem.name} (${existingItem.quantity} → ${newQuantity})`,
         time: new Date().toISOString()
       };
-      
+
       let logs = [];
       if (fs.existsSync(CRASH_LOG)) {
         logs = JSON.parse(fs.readFileSync(CRASH_LOG, 'utf8'));
@@ -225,7 +231,7 @@ app.post('/im/manage', (req, res) => {
         message: `⚠️ Low stock alert: ${newItem.name} (Current: ${newItem.quantity}, Minimum: 5)`,
         time: new Date().toISOString()
       };
-      
+
       let logs = [];
       if (fs.existsSync(CRASH_LOG)) {
         logs = JSON.parse(fs.readFileSync(CRASH_LOG, 'utf8'));
@@ -241,7 +247,7 @@ app.post('/im/manage', (req, res) => {
       message: `Item created successfully: ${newItem.name}`,
       time: new Date().toISOString()
     };
-    
+
     let logs = [];
     if (fs.existsSync(CRASH_LOG)) {
       logs = JSON.parse(fs.readFileSync(CRASH_LOG, 'utf8'));
@@ -285,7 +291,7 @@ app.post('/im/delete/:id', (req, res) => {
       message: `Item deleted: ${itemToDelete.name} (Quantity: ${itemToDelete.quantity}, Category: ${itemToDelete.category})`,
       time: new Date().toISOString()
     };
-    
+
     let logs = [];
     if (fs.existsSync(CRASH_LOG)) {
       logs = JSON.parse(fs.readFileSync(CRASH_LOG, 'utf8'));
@@ -332,6 +338,11 @@ app.get('/api/inventory-alerts', (req, res) => {
   }
 });
 
+app.get('/api/users', (_req, res) => {
+  const users = JSON.parse(fs.readFileSync(path.join(__dirname,'users.json'),'utf8'));
+  res.json(users);
+});
+
 // Get inventory alerts - only return latest 3
 app.get('/im/alerts', (req, res) => {
   try {
@@ -341,9 +352,9 @@ app.get('/im/alerts', (req, res) => {
     }
     // Filter only alert logs and get latest 3
     logs = logs
-      .filter(log => log.origin === 'inventory-alert')
-      .sort((a, b) => new Date(b.time) - new Date(a.time))
-      .slice(0, 3);
+        .filter(log => log.origin === 'inventory-alert')
+        .sort((a, b) => new Date(b.time) - new Date(a.time))
+        .slice(0, 3);
     res.json(logs);
   } catch (err) {
     console.error('GET /im/alerts error:', err);
@@ -367,12 +378,12 @@ app.get('/api/report-visible-events', (_req, res) => {
 function maintainAlertLog(logs) {
   const alerts = logs.filter(log => log.origin === 'inventory-alert');
   const nonAlerts = logs.filter(log => log.origin !== 'inventory-alert');
-  
+
   // Sort alerts by time and keep only the latest 3
   const latestAlerts = alerts
-    .sort((a, b) => new Date(b.time) - new Date(a.time))
-    .slice(0, 3);
-  
+      .sort((a, b) => new Date(b.time) - new Date(a.time))
+      .slice(0, 3);
+
   // Combine non-alerts with the latest 3 alerts
   return [...nonAlerts, ...latestAlerts];
 }
@@ -433,8 +444,8 @@ app.post('/register', (req, res) => {
 
   try {
     let users = fs.existsSync(USERS_PATH)
-      ? JSON.parse(fs.readFileSync(USERS_PATH, 'utf8'))
-      : [];
+        ? JSON.parse(fs.readFileSync(USERS_PATH, 'utf8'))
+        : [];
 
     if (users.find(u => u.username === username)) {
       return res.send('❌ Username already exists. <a href="/register.html">Try again</a>');

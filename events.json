@@ -6,6 +6,13 @@
     "start": "2025-06-07T15:00",
     "duration": 45,
     "description": "",
+    "organiser": "Emma",
+    "participants": [
+      "Emma",
+      "Yu",
+      "Aisha",
+      "Carlos"
+    ],
     "status": "Scheduled",
     "id": "1000000000001"
   },
@@ -16,6 +23,13 @@
     "start": "2025-06-05T10:00",
     "duration": 30,
     "description": "",
+    "organiser": "Emma",
+    "participants": [
+      "Emma",
+      "Yu",
+      "Aisha",
+      "Carlos"
+    ],
     "status": "Scheduled",
     "id": "1000000000002"
   },
@@ -26,6 +40,11 @@
     "start": "2025-05-07T00:00",
     "duration": 60,
     "description": "",
+    "organiser": "Emma",
+    "participants": [
+      "Emma",
+      "Yu"
+    ],
     "status": "Completed",
     "id": "1000000000003"
   },
@@ -36,6 +55,11 @@
     "start": "2025-05-10T14:00:00Z",
     "duration": 60,
     "description": "",
+    "organiser": "Emma",
+    "participants": [
+      "Aisha",
+      "Carlos"
+    ],
     "status": "Completed",
     "id": "crystal-ball-divination"
   },
@@ -46,7 +70,14 @@
     "start": "2025-05-20T09:30:00Z",
     "duration": 60,
     "description": "",
+    "organiser": "Emma",
+    "participants": [
+      "Emma",
+      "Aisha",
+      "Carlos"
+    ],
     "status": "Completed",
     "id": "phoenix-summoning"
+
   }
 ]

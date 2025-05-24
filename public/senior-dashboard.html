@@ -272,14 +272,17 @@
       document.querySelectorAll('.calendar-day.event')
               .forEach(c => c.classList.remove('event'));
       events.forEach(ev => {
-        const day = new Date(ev.start).getDate();
-        document.querySelectorAll('.calendar-day')
-                .forEach(cell => {
-                  if (!cell.classList.contains('other-month') &&
-                          +cell.textContent === day) {
-                    cell.classList.add('event');
-                  }
-                });
+        const dateObj = new Date(ev.start);
+        if (dateObj.getFullYear() === 2025 && dateObj.getMonth() === 5) {
+          const day = dateObj.getDate();
+          document.querySelectorAll('.calendar-day')
+                  .forEach(cell => {
+                    if (!cell.classList.contains('other-month') &&
+                            +cell.textContent === day) {
+                      cell.classList.add('event');
+                    }
+                  });
+        }
       });
     }
 
@@ -346,4 +349,3 @@
 </script>
 </body>
 </html>
-

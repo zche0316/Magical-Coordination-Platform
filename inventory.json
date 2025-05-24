@@ -2,12 +2,12 @@
   {
     "id": "1",
     "name": "Crystal Shard",
-    "quantity": 10,
+    "quantity": 11,
     "category": "Ingredients",
     "condition": "Stunning",
     "minStockLevel": 5,
     "createdAt": "2025-05-01T09:00:00.000Z",
-    "updatedAt": "2025-05-01T09:00:00.000Z"
+    "updatedAt": "2025-05-24T08:48:44.547Z"
   },
   {
     "id": "2",

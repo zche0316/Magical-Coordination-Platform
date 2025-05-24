@@ -1,9 +1,9 @@
+<!-- public/edit-event.html -->
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
   <script src="crash-logger.js"></script>
-
   <title>Edit Event</title>
   <style>
     body { font-family: 'Georgia', serif; background-color: #f2f0e6; color: #2f2f2f; margin: 0; padding: 0; line-height: 1.6; }
@@ -26,9 +26,11 @@
     .event-list button:hover { color: #7a4e20; }
     .hidden { display: none; }
     label { display: block; margin: 15px 0 8px; color: #3c2a13; font-weight: 500; }
+    .required-field::after { content: " *"; color: #dc3545; }
     input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #d6c7a1; border-radius: 6px; background: #fff; font-family: 'Georgia', serif; font-size: 1em; transition: all 0.2s ease; appearance: none; }
     select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%237a4e20' d='M6 8L0 0h12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 12px 8px; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: #5b3e1d; box-shadow: 0 0 0 2px rgba(91, 62, 29, 0.1); }
+    select[multiple] { height: auto; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #5b3e1d; box-shadow: 0 0 0 2px rgba(91,62,29,0.1); }
     .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
     .btn { background-color: #5b3e1d; color: #fff; padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 1em; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .btn:hover { background-color: #7a4e20; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
@@ -37,156 +39,211 @@
     small { font-size: 0.9em; color: #7a4e20; margin-left: 10px; }
   </style>
   <script>
-    if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Senior Wizard') {
+
+    if (
+            localStorage.getItem('isLoggedIn') !== 'true' ||
+            localStorage.getItem('role') !== 'Senior Wizard'
+    ) {
       window.location.href = 'index.html';
     }
-
   </script>
 </head>
 <body>
-  <div class="navbar">
-    <div class="nav-title">🧙‍♂️ Spellcasting and Ritual Panel</div>
-    <button class="logout-btn" onclick="localStorage.clear();location.href='index.html'">🚪 Logout</button>
-  </div>
+<div class="navbar">
+  <div class="nav-title">🧙‍♂️ Spellcasting and Ritual Panel</div>
+  <button class="logout-btn" onclick="localStorage.clear();location.href='index.html'">
+    🚪 Logout
+  </button>
+</div>
 
-  <div class="layout">
-    <aside class="sidebar">
-      <ul class="sidebar-menu">
-        <li><a href="senior-dashboard.html">🗓️ Upcoming Events</a></li>
-        <li><a href="senior-schedule.html">📝 Create Event</a></li>
-        <li><a href="edit-event.html">🪄 Edit Event</a></li>
-        <li><a href="delete-event.html">🗑️ Delete Event</a></li>
-        <li><a href="history.html">📚 Event History</a></li>
-        <li><a href="draft-box.html">📦 Draft Box</a></li>
-      </ul>
-    </aside>
+<div class="layout">
+  <aside class="sidebar">
+    <ul class="sidebar-menu">
+      <li><a href="senior-dashboard.html">🗓️ Upcoming Events</a></li>
+      <li><a href="senior-schedule.html">📝 Create Event</a></li>
+      <li><a href="edit-event.html">🪄 Edit Event</a></li>
+      <li><a href="delete-event.html">🗑️ Delete Event</a></li>
+      <li><a href="history.html">📚 Event History</a></li>
+      <li><a href="draft-box.html">📦 Draft Box</a></li>
+    </ul>
+  </aside>
 
-    <main class="main-content">
-      <div class="calendar">
-
-        <section id="list-view">
-          <h2>🪄 Scheduled Events</h2>
-          <ul id="edit-list" class="event-list"></ul>
-        </section>
-
-        <section id="form-view" class="hidden">
-          <h2>
-            🪄 Editing <span id="edit-title"></span>
-            <small>ID: <span id="edit-id"></span></small>
-          </h2>
-          <form id="event-form">
-            <label for="title">Title:</label>
-            <input id="title" required />
-            <label for="category" class="required-field">Category</label>
-            <select id="category" required>
-              <option value="" disabled selected>Select a category</option>
-              <option value="summoning">Summoning Ritual</option>
-              <option value="divination">Divination Session</option>
-              <option value="enchantment">Enchantment Ceremony</option>
-              <option value="potion">Potion Brewing</option>
-              <option value="other">Other Magical Event</option>
-            </select>
-            <label for="location">Location:</label>
-            <input id="location" required />
-            <label for="start">Start Time:</label>
-            <input id="start" type="datetime-local" required />
-            <label for="duration">Duration (mins):</label>
-            <input id="duration" type="number" min="1" required />
-            <label for="description">Description:</label>
-            <textarea id="description" rows="4"></textarea>
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
-              <button type="submit" class="btn">💾 Save Changes</button>
-            </div>
-          </form>
-        </section>
-
-      </div>
-    </main>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const params    = new URLSearchParams(window.location.search);
-      const eventId   = params.get('id');
-      const listEl    = document.getElementById('edit-list');
-      const formEl    = document.getElementById('form-view');
-      const titleSpan = document.getElementById('edit-title');
-      const idSpan    = document.getElementById('edit-id');
-      const btnCancel = document.getElementById('btn-cancel');
-      const allEvents = await (await fetch('/api/events')).json();
+  <main class="main-content">
+    <div class="calendar">
 
 
-      btnCancel.addEventListener('click', () =>
-        window.location.href = 'senior-dashboard.html'
-      );
+      <section id="list-view">
+        <h2>🪄 Scheduled Events</h2>
+        <ul id="edit-list" class="event-list"></ul>
+      </section>
 
 
-      if (eventId) {
-        listEl.closest('section').classList.add('hidden');
-        formEl.classList.remove('hidden');
+      <section id="form-view" class="hidden">
+        <h2>
+          🪄 Editing <span id="edit-title"></span>
+          <small>ID: <span id="edit-id"></span></small>
+        </h2>
+        <form id="event-form">
+          <label for="title">Title:</label>
+          <input id="title" required />
 
-        const ev = allEvents.find(e => e.id === eventId);
-        if (!ev) return alert('Event not found');
+          <label for="category" class="required-field">Category</label>
+          <select id="category" required>
+            <option value="" disabled>Select a category</option>
+            <option>Summoning Ritual</option>
+            <option>Divination Session</option>
+            <option>Enchantment Ceremony</option>
+            <option>Potion Brewing</option>
+            <option>Other Magical Event</option>
+          </select>
 
-        titleSpan.textContent = ev.title;
-        document.getElementById('edit-id').textContent = ev.id;
-        idSpan.textContent    = ev.id;
-        ['title','category','location','start','duration','description']
-          .forEach(id => document.getElementById(id).value = ev[id]);
+          <label for="location">Location:</label>
+          <input id="location" required />
 
-        document.getElementById('event-form').onsubmit = async e => {
-          e.preventDefault();
-          const payload = {
-            title:       document.getElementById('title').value,
-            category:    document.getElementById('category').value,
-            location:    document.getElementById('location').value,
-            start:       document.getElementById('start').value,
-            duration:    Number(document.getElementById('duration').value),
-            description: document.getElementById('description').value,
-            status:      'Scheduled'
-          };
-          const res = await fetch(`/api/events/${eventId}`, {
-            method: 'PUT',
-            headers:{ 'Content-Type':'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const ret = await res.json();
-          if (res.status === 409) {
-            return alert('⚠️ Please choose a different time.');
-          }
-          if (ret.success) {
-            localStorage.setItem('eventsUpdated', Date.now());
-            //alert('Update successful');
-            window.location.href = 'senior-dashboard.html';
-          } else {
-            alert('Update failed: ' + (ret.error||res.statusText));
-          }
+          <label for="start">Start Time:</label>
+          <input id="start" type="datetime-local" required />
+
+          <label for="duration">Duration (mins):</label>
+          <input id="duration" type="number" min="1" required />
+
+          <label for="description">Description:</label>
+          <textarea id="description" rows="4"></textarea>
+
+
+          <label for="organiser" class="required-field">Organiser</label>
+          <select id="organiser" required>
+            <option value="" disabled>Loading…</option>
+          </select>
+
+
+          <label for="participants">Participants</label>
+          <select id="participants" multiple>
+
+          </select>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="btn-cancel">
+              Cancel
+            </button>
+            <button type="submit" class="btn">💾 Save Changes</button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const params  = new URLSearchParams(window.location.search);
+    const eventId = params.get('id');
+    const listSec = document.getElementById('list-view');
+    const formSec = document.getElementById('form-view');
+    const listEl  = document.getElementById('edit-list');
+    const form    = document.getElementById('event-form');
+    const btnCancel = document.getElementById('btn-cancel');
+
+
+    const allEvents = await (await fetch('/api/events')).json();
+
+    const users     = await (await fetch('/api/users')).json();
+
+
+    const organisers = users.filter(u => u.role === 'Senior Wizard').map(u => u.username);
+    const selOrg     = document.getElementById('organiser');
+    selOrg.innerHTML = '<option value="" disabled>Select organiser</option>';
+    organisers.forEach(name => {
+      const o = document.createElement('option');
+      o.value = name; o.textContent = name;
+      selOrg.appendChild(o);
+    });
+
+
+    const selParts = document.getElementById('participants');
+    selParts.innerHTML = '';
+    users.forEach(u => {
+      const o = document.createElement('option');
+      o.value = u.username;
+      o.textContent = `${u.username} (${u.role})`;
+      selParts.appendChild(o);
+    });
+
+
+    btnCancel.onclick = () => window.location.href = 'edit-event.html';
+
+    if (eventId) {
+
+      listSec.classList.add('hidden');
+      formSec.classList.remove('hidden');
+
+
+      const ev = allEvents.find(e => e.id === eventId);
+      if (!ev) return alert('Event not found');
+      document.getElementById('edit-title').textContent = ev.title;
+      document.getElementById('edit-id').textContent    = ev.id;
+
+      ['title','category','location','start','duration','description']
+              .forEach(id => document.getElementById(id).value = ev[id] || '');
+
+      selOrg.value = ev.organiser || '';
+      Array.from(selParts.options).forEach(opt => {
+        opt.selected = (ev.participants || []).includes(opt.value);
+      });
+
+
+      form.onsubmit = async e => {
+        e.preventDefault();
+        const payload = {
+          title:        form.title.value,
+          category:     form.category.value,
+          location:     form.location.value,
+          start:        form.start.value,
+          duration:     Number(form.duration.value),
+          description:  form.description.value,
+          organiser:    selOrg.value,
+          participants: Array.from(selParts.selectedOptions).map(o => o.value),
+          status:       'Scheduled'
         };
+        const res = await fetch(`/api/events/${eventId}`, {
+          method: 'PUT',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if (res.status === 409) {
+          return alert('⚠️ Conflict: The organizer or participant has already made a schedule at the same time');
+        }
+        const ret = await res.json();
+        if (ret.success) {
+          localStorage.setItem('eventsUpdated', Date.now());
+          window.location.href = 'senior-dashboard.html';
+        } else {
+          alert('Update failed: ' + (ret.error || res.statusText));
+        }
+      };
 
-        btnCancel.onclick = () => window.location.href = 'edit-event.html';
+    } else {
 
-      } else {
-        listEl.closest('section').classList.remove('hidden');
-        formEl.classList.add('hidden');
+      listSec.classList.remove('hidden');
+      formSec.classList.add('hidden');
 
-        allEvents
-          .filter(e => e.status === 'Scheduled')
-          .sort((a,b) => new Date(a.start) - new Date(b.start))
-          .forEach(ev => {
-            const li = document.createElement('li');
-            const d  = new Date(ev.start);
-            li.innerHTML = `
-              <span>${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${ev.title}</span>
+      allEvents
+              .filter(e => e.status === 'Scheduled')
+              .sort((a,b) => new Date(a.start) - new Date(b.start))
+              .forEach(ev => {
+                const d = new Date(ev.start);
+                const li = document.createElement('li');
+                li.innerHTML = `
+              <span>${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${ev.title} (${ev.organiser})</span>
               <button class="btn edit-btn" data-id="${ev.id}">✏️ Edit</button>
             `;
-            listEl.appendChild(li);
-          });
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-          btn.onclick = () => window.location.href = `edit-event.html?id=${btn.dataset.id}`;
-        });
-      }
-    });
-  </script>
+                listEl.appendChild(li);
+              });
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.onclick = () => window.location.href = `edit-event.html?id=${btn.dataset.id}`;
+      });
+    }
+  });
+</script>
 </body>
 </html>

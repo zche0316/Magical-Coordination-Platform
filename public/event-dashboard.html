@@ -2,7 +2,6 @@
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
-
   <title>Event Dashboard - Mystical Events</title>
   <style>
     body {
@@ -13,7 +12,6 @@
       padding: 0;
       line-height: 1.6;
     }
-
     .navbar {
       background: #5b3e1d;
       padding: 1rem 2rem;
@@ -23,13 +21,7 @@
       align-items: center;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    .nav-title {
-      font-size: 1.2em;
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
-
+    .nav-title { font-size: 1.2em; font-weight: 600; letter-spacing: 1px; }
     .logout-btn {
       background: #dc3545;
       border: none;
@@ -45,19 +37,16 @@
       gap: 5px;
       width: auto;
     }
-
     .logout-btn:hover {
       background: #c82333;
       transform: translateY(-1px);
       box-shadow: 0 3px 6px rgba(0,0,0,0.15);
     }
-
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 30px;
     }
-
     h1 {
       text-align: center;
       font-size: 2.2em;
@@ -70,13 +59,11 @@
       justify-content: center;
       gap: 10px;
     }
-
     .filters-container {
       display: flex;
       justify-content: center;
       margin-bottom: 30px;
     }
-
     .filters {
       display: flex;
       gap: 1rem;
@@ -88,7 +75,6 @@
       padding: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-
     select, input {
       padding: 10px 14px;
       font-size: 1em;
@@ -98,19 +84,16 @@
       transition: all 0.2s ease;
       min-width: 200px;
     }
-
     select:focus, input:focus {
       outline: none;
       border-color: #5b3e1d;
       box-shadow: 0 0 0 2px rgba(91, 62, 29, 0.1);
     }
-
     .event-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 25px;
     }
-
     .event-card {
       background-color: #fff9ec;
       border: 1px solid #d6c7a1;
@@ -119,18 +102,15 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       transition: all 0.3s ease;
     }
-
     .event-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     }
-
     .event-card h3 {
       margin: 0 0 15px;
       color: #3c2a13;
       font-size: 1.3em;
     }
-
     .badge {
       display: inline-block;
       padding: 6px 12px;
@@ -140,11 +120,9 @@
       color: white;
       font-weight: 500;
     }
-
     .scheduled { background-color: #6c757d; }
     .in-progress { background-color: #007bff; }
     .completed { background-color: #28a745; }
-
     .countdown {
       font-size: 0.95em;
       color: #884400;
@@ -152,8 +130,10 @@
       padding-top: 10px;
       border-top: 1px dashed #d6c7a1;
     }
-
-    button {
+    .event-card p {
+      margin: 8px 0;
+    }
+    button.view-btn {
       background-color: #5b3e1d;
       color: white;
       padding: 12px 20px;
@@ -169,15 +149,18 @@
       justify-content: center;
       gap: 8px;
     }
-
-    button:hover {
+    button.view-btn:hover {
       background-color: #7a4e20;
       transform: translateY(-1px);
       box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
   </style>
   <script>
-    if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Junior Wizard') {
+
+    if (
+            localStorage.getItem('isLoggedIn') !== 'true' ||
+            localStorage.getItem('role') !== 'Junior Wizard'
+    ) {
       window.location.href = 'index.html';
     }
   </script>
@@ -185,125 +168,134 @@
 <body>
 <div class="navbar">
   <div class="nav-title">Event Dashboard</div>
-  <button class="logout-btn" onclick="localStorage.clear();location.href='index.html'">🚪 Logout</button>
+  <button class="logout-btn" onclick="localStorage.clear();location.href='index.html'">
+    🚪 Logout
+  </button>
 </div>
 <div class="container">
   <h1>🔮 Explore Magical Events</h1>
   <div class="filters-container">
     <div class="filters">
-      <label>
-        <select><option>All Categories</option><option>Summoning</option><option>Divination</option><option>Enchantment</option><option>Potion Brewing</option></select>
-      </label>
-      <label>
-        <select><option>All Status</option><option>Scheduled</option><option>In Progress</option><option>Completed</option></select>
-      </label>
-      <label>
-        <input type="text" placeholder="Search by location...">
-      </label>
+      <label for="categoryFilter"></label><select id="categoryFilter">
+        <option>All Categories</option>
+        <option>Summoning</option>
+        <option>Divination</option>
+        <option>Enchantment</option>
+        <option>Potion Brewing</option>
+      </select>
+      <label for="statusFilter"></label><select id="statusFilter">
+        <option>All Status</option>
+        <option>Scheduled</option>
+        <option>In Progress</option>
+        <option>Completed</option>
+      </select>
+      <label for="locationFilter"></label><input type="text" id="locationFilter" placeholder="Search by location...">
     </div>
   </div>
-  <div class="event-grid"></div>
+  <div class="event-grid" id="eventGrid"></div>
 </div>
-<script>
 
+<script>
   async function loadEvents() {
-    const grid = document.querySelector('.event-grid');
+    const grid = document.getElementById('eventGrid');
     grid.innerHTML = '';
     const resp   = await fetch('/api/events');
     const events = await resp.json();
-    const now = Date.now();
+    const now    = Date.now();
 
-    const categorySelect = document.querySelectorAll('.filters select')[0];
-    const selectedCategory = categorySelect.value;
+    const catSel = document.getElementById('categoryFilter').value;
+    const statSel= document.getElementById('statusFilter').value;
+    const locKey = document.getElementById('locationFilter').value.trim().toLowerCase();
 
-    const statusSelect = document.querySelectorAll('.filters select')[1];
-    const selectedStatus = statusSelect.value;
-
-    const locationInput = document.querySelector('.filters input');
-    const locationKeyword = locationInput.value.trim().toLowerCase();
-
-    let filteredEvents = events.map(ev => {
-      const start = new Date(ev.start).getTime();
-      const end = start + ev.duration * 60000;
-      let dynamicStatus;
-      if (now < start) {
-        dynamicStatus = 'Scheduled';
-      } else if (now <= end) {
-        dynamicStatus = 'In Progress';
-      } else {
-        dynamicStatus = 'Completed';
-      }
-      return { ...ev, dynamicStatus };
+    let evs = events.map(ev => {
+      const s = new Date(ev.start).getTime();
+      const e = s + ev.duration*60000;
+      let dyn = now < s ? 'Scheduled' : (now <= e ? 'In Progress' : 'Completed');
+      return { ...ev, dynamicStatus: dyn };
     });
 
-    if (selectedCategory && selectedCategory !== 'All Categories') {
-      filteredEvents = filteredEvents.filter(ev => ev.category && ev.category.toLowerCase() === selectedCategory.toLowerCase());
-    }
-    if (selectedStatus && selectedStatus !== 'All Status') {
-      filteredEvents = filteredEvents.filter(ev => ev.dynamicStatus && ev.dynamicStatus.toLowerCase() === selectedStatus.toLowerCase());
-    }
-    if (locationKeyword) {
-      filteredEvents = filteredEvents.filter(ev => ev.location && ev.location.toLowerCase().includes(locationKeyword));
-    }
+    if (catSel!=='All Categories') evs = evs.filter(ev => ev.category===catSel);
+    if (statSel!=='All Status')   evs = evs.filter(ev => ev.dynamicStatus===statSel);
+    if (locKey) evs = evs.filter(ev => ev.location.toLowerCase().includes(locKey));
 
-    filteredEvents = filteredEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+    evs.sort((a,b)=>new Date(a.start)-new Date(b.start))
+            .forEach(ev => {
+              const card = document.createElement('div');
+              card.className = 'event-card';
 
-    filteredEvents.forEach(ev => {
-      const card = document.createElement('div');
-      card.className = 'event-card';
+              // status badge
+              const badge = document.createElement('span');
+              badge.className = 'badge ' + ev.dynamicStatus.toLowerCase().replace(' ', '-');
+              badge.textContent = ev.dynamicStatus;
+              card.appendChild(badge);
 
-      const badge = document.createElement('span');
-      badge.className = 'badge ' + ev.dynamicStatus.toLowerCase().replace(' ', '-');
-      badge.textContent = ev.dynamicStatus;
-      card.appendChild(badge);
+              // title
+              const h3 = document.createElement('h3');
+              h3.textContent = ev.title;
+              card.appendChild(h3);
 
-      const h3 = document.createElement('h3');
-      h3.textContent = ev.title;
-      card.appendChild(h3);
+              // organiser
+              const pOrg = document.createElement('p');
+              pOrg.innerHTML = `<strong>Organiser:</strong> ${ev.organiser||'—'}`;
+              card.appendChild(pOrg);
 
-      [['Category', ev.category], ['Location', ev.location]].forEach(([lab, val]) => {
-        const p = document.createElement('p');
-        p.innerHTML = `<strong>${lab}:</strong> ${val}`;
-        card.appendChild(p);
-      });
+              // participants
+              const pPar = document.createElement('p');
+              pPar.innerHTML = `<strong>Participants:</strong> ${Array.isArray(ev.participants) ? ev.participants.join(', ') : '—'}`;
+              card.appendChild(pPar);
 
-      const startDate = new Date(ev.start);
-      const pStart = document.createElement('p');
-      pStart.innerHTML = `<strong>Start:</strong> ${startDate.toLocaleString()}`;
-      card.appendChild(pStart);
+              // category and location
+              const pCat = document.createElement('p');
+              pCat.innerHTML = `<strong>Category:</strong> ${ev.category}`;
+              card.appendChild(pCat);
+              const pLoc = document.createElement('p');
+              pLoc.innerHTML = `<strong>Location:</strong> ${ev.location}`;
+              card.appendChild(pLoc);
 
-      const pDur = document.createElement('p');
-      pDur.innerHTML = `<strong>Duration:</strong> ${ev.duration} mins`;
-      card.appendChild(pDur);
+              // start and duration
+              const sd = new Date(ev.start);
+              const pStart = document.createElement('p');
+              pStart.innerHTML = `<strong>Start:</strong> ${sd.toLocaleString()}`;
+              card.appendChild(pStart);
+              const pDur = document.createElement('p');
+              pDur.innerHTML = `<strong>Duration:</strong> ${ev.duration} mins`;
+              card.appendChild(pDur);
 
-      const pCount = document.createElement('p');
-      pCount.className = 'countdown';
-      if (now < startDate.getTime()) {
-        const days = Math.floor((startDate - now) / (1000*60*60*24));
-        pCount.textContent = `⏳ Starts in ${days} day${days !== 1 ? 's' : ''}`;
-      } else if (now <= startDate.getTime() + ev.duration*60000) {
-        pCount.textContent = '🧿 Live Now';
-      } else {
-        pCount.textContent = '✅ Finished';
-      }
-      card.appendChild(pCount);
+              // countdown/live/finished
+              const pCount = document.createElement('p');
+              pCount.className = 'countdown';
+              if (now < sd) {
+                const days = Math.floor((sd-now)/(1000*60*60*24));
+                pCount.textContent = `⏳ Starts in ${days} day${days!==1?'s':''}`;
+              } else if (now <= sd.getTime()+ev.duration*60000) {
+                pCount.textContent = '🧿 Live Now';
+              } else {
+                pCount.textContent = '✅ Finished';
+              }
+              card.appendChild(pCount);
 
-      grid.appendChild(card);
-    });
+              // view report button
+              const btn = document.createElement('button');
+              btn.className = 'view-btn';
+              btn.textContent = '📄 View Full Report';
+              btn.onclick = () => location.href = `analyst-report.html?event=${ev.id}`;
+              card.appendChild(btn);
+
+              grid.appendChild(card);
+            });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.filters select').forEach(sel => sel.addEventListener('change', loadEvents));
-    document.querySelector('.filters input').addEventListener('input', loadEvents);
+    ['categoryFilter','statusFilter'].forEach(id =>
+            document.getElementById(id).addEventListener('change', loadEvents)
+    );
+    document.getElementById('locationFilter')
+            .addEventListener('input', loadEvents);
     loadEvents();
     window.addEventListener('storage', e => {
-      if (e.key === 'eventsUpdated') {
-        loadEvents();
-      }
+      if (e.key==='eventsUpdated') loadEvents();
     });
   });
-
-
 </script>
 </body>
 </html>

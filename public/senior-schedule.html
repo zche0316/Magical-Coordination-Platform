@@ -1,248 +1,250 @@
-<!-- senior-schedule.html -->
+<!-- public/senior-schedule.html -->
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
-  <script src="crash-logger.js"></script>
   <title>Create/Edit Event - Senior Wizard</title>
   <style>
-    body { 
-      font-family: 'Georgia', serif; 
-      background-color: #f2f0e6; 
-      color: #2f2f2f; 
-      margin: 0; 
-      padding: 0; 
-      line-height: 1.6;
-    }
-    .navbar { 
-      background-color: #5b3e1d; 
-      padding: 1rem 2rem; 
-      color: #fff; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+    body { font-family: 'Georgia', serif; background-color: #f2f0e6; color: #2f2f2f; margin: 0; padding: 0; line-height: 1.6; }
+    .navbar { background-color: #5b3e1d; padding: 1rem 2rem; color: #fff; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     .nav-title { font-size: 1.2em; font-weight: 600; letter-spacing: 1px; }
-    .back-btn {
-      background: #6c757d; border: none; color: #fff;
-      padding: 8px 16px; border-radius: 6px; cursor: pointer;
-      font-size: 0.95em; transition: all 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .back-btn:hover {
-      background: #5a6268; transform: translateY(-1px);
-      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-    }
-    .container { 
-      max-width: 600px; background: #fff9ec;
-      border: 1px solid #d6c7a1; border-radius: 8px;
-      padding: 30px; margin: 30px auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    .container h2 {
-      margin-top: 0; color: #5b3e1d;
-      font-size: 1.8em; padding-bottom: 10px;
-      border-bottom: 1px solid #d6c7a1;
-      display: flex; align-items: center; gap: 10px;
-    }
+    .back-btn { background: #6c757d; border: none; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.95em; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .back-btn:hover { background: #5a6268; transform: translateY(-1px); box-shadow: 0 3px 6px rgba(0,0,0,0.15); }
+    .container { max-width: 600px; background: #fff9ec; border: 1px solid #d6c7a1; border-radius: 8px; padding: 30px; margin: 30px auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .container h2 { margin-top: 0; color: #5b3e1d; font-size: 1.8em; padding-bottom: 10px; border-bottom: 1px solid #d6c7a1; display: flex; align-items: center; gap: 10px; }
     .form-group { margin-bottom: 20px; }
-    .form-group label {
-      display: block; margin: 15px 0 8px;
-      color: #3c2a13; font-weight: 500;
-    }
-    .required-field::after {
-      content: " *"; color: #dc3545;
-    }
+    .form-group label { display: block; margin: 15px 0 8px; color: #3c2a13; font-weight: 500; }
+    .required-field::after { content: " *"; color: #dc3545; }
     .container input, .container select, .container textarea {
-      width: 100%; padding: 10px 12px;
-      border: 1px solid #d6c7a1; border-radius: 6px;
-      background: #fff; font-family: 'Georgia', serif;
-      transition: all 0.2s ease;
+      width: 100%; padding: 10px 12px; border: 1px solid #d6c7a1; border-radius: 6px;
+      background: #fff; font-family: 'Georgia', serif; transition: all 0.2s ease;
     }
+    .container select[multiple] { height: auto; }
     .container input:focus, .container select:focus, .container textarea:focus {
-      outline: none; border-color: #5b3e1d;
-      box-shadow: 0 0 0 2px rgba(91,62,29,0.1);
+      outline: none; border-color: #5b3e1d; box-shadow: 0 0 0 2px rgba(91,62,29,0.1);
     }
-    .form-actions {
-      margin-top: 25px; display: flex;
-      justify-content: space-between;
-    }
-    .btn {
-      background-color: #5b3e1d; color: #fff;
-      padding: 12px 20px; border: none;
-      border-radius: 6px; cursor: pointer;
-      font-size: 1em; transition: all 0.2s ease;
-      display: inline-flex; align-items: center; gap: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .btn:hover {
-      background-color: #7a4e20;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-    .btn-secondary {
-      background-color: #6c757d; margin-right: 10px;
-    }
-    .btn-secondary:hover {
-      background-color: #5a6268;
-    }
-    .btn-draft {
-      background-color: #17a2b8; margin-right: 10px;
-    }
-    .btn-draft:hover {
-      background-color: #138496;
-    }
+    .form-actions { margin-top: 25px; display: flex; justify-content: space-between; }
+    .btn { background-color: #5b3e1d; color: #fff; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 1em; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .btn:hover { background-color: #7a4e20; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+    .btn-secondary { background-color: #6c757d; margin-right: 10px; }
+    .btn-secondary:hover { background-color: #5a6268; }
+    .btn-draft { background-color: #17a2b8; margin-right: 10px; }
+    .btn-draft:hover { background-color: #138496; }
   </style>
   <script>
-    if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'Senior Wizard') {
+
+    if (
+            localStorage.getItem('isLoggedIn') !== 'true' ||
+            localStorage.getItem('role') !== 'Senior Wizard'
+    ) {
       window.location.href = 'index.html';
     }
   </script>
 </head>
 <body>
-  <div class="navbar">
-    <div class="nav-title">Events Scheduler</div>
-    <button class="back-btn" id="btn-back-top" onclick="location.href='senior-dashboard.html'">
-      ← Back to Senior Wizard Dashboard
-    </button>
-  </div>
+<div class="navbar">
+  <div class="nav-title">Events Scheduler</div>
+  <button class="back-btn" id="btn-back-top" onclick="location.href='senior-dashboard.html'">
+    ← Back to Senior Wizard Dashboard
+  </button>
+</div>
 
-  <div class="container">
-    <h2>✏️ Create / Edit Event</h2>
-    <form id="event-form">
-      <div class="form-group">
-        <label for="title" class="required-field">Event Title</label>
-        <input type="text" id="title" required />
-      </div>
-      <div class="form-group">
-        <label for="category" class="required-field">Category</label>
-        <select id="category" required>
-          <option value="" disabled selected>Select a category</option>
-          <option value="summoning">Summoning Ritual</option>
-          <option value="divination">Divination Session</option>
-          <option value="enchantment">Enchantment Ceremony</option>
-          <option value="potion">Potion Brewing</option>
-          <option value="other">Other Magical Event</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="location" class="required-field">Location</label>
-        <input type="text" id="location" required />
-      </div>
-      <div class="form-group">
-        <label for="start" class="required-field">Start Time</label>
-        <input type="datetime-local" id="start" required />
-      </div>
-      <div class="form-group">
-        <label for="duration" class="required-field">Duration (minutes)</label>
-        <input type="number" id="duration" min="1" required />
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea id="description" rows="4"></textarea>
-      </div>
-      <div class="form-actions">
-        <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
-        <div>
-          <button type="button" class="btn btn-draft" id="btn-draft">📝 Save as Draft</button>
-          <button type="submit" class="btn">💾 Save Event</button>
-        </div>
-      </div>
-    </form>
-  </div>
+<div class="container">
+  <h2>✏️ Create / Edit Event</h2>
+  <form id="event-form">
+    <!-- Existing Fields ... -->
+    <div class="form-group">
+      <label for="title" class="required-field">Event Title</label>
+      <input type="text" id="title" required />
+    </div>
+    <div class="form-group">
+      <label for="category" class="required-field">Category</label>
+      <select id="category" required>
+        <option value="" disabled selected>Select a category</option>
+        <option>Summoning Ritual</option>
+        <option>Divination Session</option>
+        <option>Enchantment Ceremony</option>
+        <option>Potion Brewing</option>
+        <option>Other Magical Event</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="location" class="required-field">Location</label>
+      <input type="text" id="location" required />
+    </div>
+    <div class="form-group">
+      <label for="start" class="required-field">Start Time</label>
+      <input type="datetime-local" id="start" required />
+    </div>
+    <div class="form-group">
+      <label for="duration" class="required-field">Duration (minutes)</label>
+      <input type="number" id="duration" min="1" required />
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" rows="4"></textarea>
+    </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const params    = new URLSearchParams(window.location.search);
-      const draftId   = params.get('draftId');
-      const form      = document.getElementById('event-form');
-      const btnCancel = document.getElementById('btn-cancel');
-      const btnBack   = document.getElementById('btn-back-top');
+    <!-- New: Organiser dropdown -->
+    <div class="form-group">
+      <label for="organiser" class="required-field">Organiser</label>
+      <select id="organiser" required>
+        <option value="">Loading organisers…</option>
+      </select>
+    </div>
+    <!-- New: Participants multi-select -->
+    <div class="form-group">
+      <label for="participants">Participants</label>
+      <select id="participants" multiple>
+        <!-- options will be inserted here -->
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" id="btn-cancel">Cancel</button>
+      <div>
+        <button type="button" class="btn btn-draft" id="btn-draft">📝 Save as Draft</button>
+        <button type="submit" class="btn">💾 Save Event</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+
+    console.log('Fetching users...');
+    const resUsers = await fetch('/api/users');
+    console.log('Users fetch status:', resUsers.status);
+    const users = await resUsers.json();
+    console.log('Users:', users);
 
 
-      if (draftId) {
-        btnCancel.addEventListener('click', () => location.href = 'draft-box.html');
-        btnBack.addEventListener('click',   () => location.href = 'draft-box.html');
+    const organisers = users.filter(u => u.role === 'Senior Wizard').map(u => u.username);
+    const selOrg = document.getElementById('organiser');
+    selOrg.innerHTML = '<option value="" disabled>Select organiser…</option>';
+    organisers.forEach(name => {
+      const o = document.createElement('option');
+      o.value = name; o.textContent = name;
+      selOrg.appendChild(o);
+    });
 
-        const events = await (await fetch('/api/events')).json();
-        const dr     = events.find(e => e.id === draftId);
-        if (dr) {
-          ['title','category','location','start','duration','description']
-            .forEach(id => document.getElementById(id).value = dr[id]);
-        }
-      } else {
-        btnCancel.addEventListener('click', () => location.href = 'senior-dashboard.html');
-        btnBack.addEventListener('click',   () => location.href = 'senior-dashboard.html');
+
+    const selParts = document.getElementById('participants');
+    selParts.innerHTML = '';
+    users.forEach(u => {
+      const o = document.createElement('option');
+      o.value = u.username;
+      o.textContent = u.username + ' (' + u.role + ')';
+      selParts.appendChild(o);
+    });
+
+
+    const params = new URLSearchParams(window.location.search);
+    const draftId = params.get('draftId');
+    const form = document.getElementById('event-form');
+    const btnCancel = document.getElementById('btn-cancel');
+    const btnBack = document.getElementById('btn-back-top');
+
+    if (draftId) {
+      btnCancel.onclick = () => location.href = 'draft-box.html';
+      btnBack.onclick = () => location.href = 'draft-box.html';
+      const evs = await (await fetch('/api/events')).json();
+      const dr = evs.find(e => e.id === draftId);
+      if (dr) {
+        ['title','category','location','start','duration','description']
+                .forEach(id => document.getElementById(id).value = dr[id] || '');
+        selOrg.value = dr.organiser || '';
+        Array.from(selParts.options).forEach(opt => {
+          opt.selected = (dr.participants||[]).includes(opt.value);
+        });
+      }
+    } else {
+      btnCancel.onclick = () => location.href = 'senior-dashboard.html';
+      btnBack.onclick = () => location.href = 'senior-dashboard.html';
+    }
+
+    // 5) Save Draft
+    document.getElementById('btn-draft').onclick = async () => {
+      const payload = {
+        title: form.title.value,
+        category: form.category.value,
+        location: form.location.value,
+        start: form.start.value,
+        duration: Number(form.duration.value),
+        description: form.description.value,
+        organiser: selOrg.value,
+        participants: Array.from(selParts.selectedOptions).map(o => o.value),
+        status: 'Draft'
+      };
+      const url = draftId ? `/api/events/${draftId}` : '/api/events';
+      const method = draftId ? 'PUT' : 'POST';
+      const r = await fetch(url, {
+        method, headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      console.log('Draft save response:', r.status);
+      if (r.ok) location.href = 'draft-box.html';
+      else alert('Draft save failed');
+    };
+
+    // 6) Submit Scheduled
+    form.onsubmit = async e => {
+      e.preventDefault();
+      const all = await (await fetch('/api/events')).json();
+      const scheduled = all.filter(ev =>
+              ev.status === 'Scheduled'
+              && ev.id !== draftId
+      );
+
+      const newStart = new Date(form.start.value);
+      const newEnd   = new Date(newStart.getTime() + Number(form.duration.value) * 60000);
+
+      const organiser     = selOrg.value;
+      const participants  = Array.from(selParts.selectedOptions).map(o => o.value);
+
+      const conflict = scheduled.some(ev => {
+        const s = new Date(ev.start);
+        const e = new Date(s.getTime() + ev.duration * 60000);
+
+        if (newStart >= e || newEnd <= s) return false;
+
+        if (ev.organiser === organiser) return true;
+
+        return Array.isArray(ev.participants) &&
+                ev.participants.some(p => participants.includes(p));
+
+
+      });
+
+      if (conflict) {
+        return alert('⚠️ Conflict: The organizer or participant has already made a schedule at the same time');
       }
 
-      // 💾 Save as Draft
-      document.getElementById('btn-draft')
-        .addEventListener('click', async () => {
-          const payload = {
-            title:       form.title.value,
-            category:    form.category.value,
-            location:    form.location.value,
-            start:       form.start.value,
-            duration:    Number(form.duration.value),
-            description: form.description.value,
-            status:      'Draft'
-          };
-          const url    = draftId ? `/api/events/${draftId}` : '/api/events';
-          const method = draftId ? 'PUT' : 'POST';
-          const res    = await fetch(url, {
-            method, headers: { 'Content-Type':'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (res.ok) {
-            localStorage.setItem('eventsUpdated', Date.now());
-            window.location.href = 'draft-box.html';
-          } else {
-            const err = await res.json().catch(()=>({}));
-            alert('Save draft failed: ' + (err.error||res.statusText));
-          }
-        });
 
-      // 💾 Save Event 
-      form.addEventListener('submit', async e => {
-        e.preventDefault();
-
-        const all = await (await fetch('/api/events')).json();
-        const scheduled = all.filter(ev => ev.status === 'Scheduled');
-        const newStart  = new Date(form.start.value);
-        const newEnd    = new Date(newStart.getTime() + Number(form.duration.value)*60000);
-        const conflict  = scheduled.some(ev => {
-          const s = new Date(ev.start);
-          const e = new Date(s.getTime() + ev.duration*60000);
-          return newStart < e && newEnd > s;
-        });
-        if (conflict) {
-          return alert('⚠️ Time conflict, please choose another slot.');
-        }
-        const payload = {
-          title:       form.title.value,
-          category:    form.category.value,
-          location:    form.location.value,
-          start:       form.start.value,
-          duration:    Number(form.duration.value),
-          description: form.description.value,
-          status:      'Scheduled'
-        };
-        const url    = draftId ? `/api/events/${draftId}` : '/api/events';
-        const method = draftId ? 'PUT' : 'POST';
-        const resp   = await fetch(url, {
-          method, headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const ret = await resp.json();
-        if (resp.ok && ret.success) {
-          localStorage.setItem('eventsUpdated', Date.now());
-          location.href = 'senior-dashboard.html';
-        } else {
-          alert('Save failed: ' + (ret.error||resp.statusText));
-        }
+      const payload = {
+        title: form.title.value,
+        category: form.category.value,
+        location: form.location.value,
+        start: form.start.value,
+        duration: Number(form.duration.value),
+        description: form.description.value,
+        organiser: selOrg.value,
+        participants: Array.from(selParts.selectedOptions).map(o => o.value),
+        status: 'Scheduled'
+      };
+      const url = draftId ? `/api/events/${draftId}` : '/api/events';
+      const method = draftId ? 'PUT' : 'POST';
+      const r = await fetch(url, {
+        method, headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
       });
-    });
-  </script>
+      console.log('Submit response:', r.status);
+      const ret = await r.json();
+      if (r.ok && ret.success) location.href = 'save-success.html';
+      else alert('Save failed: ' + (ret.error||r.statusText));
+    };
+  });
+</script>
 </body>
 </html>
