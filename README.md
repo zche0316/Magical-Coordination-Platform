@@ -74,7 +74,8 @@
 
 ## Common Issues（FAQ）
 
-- If the live deployment site is currently down or experiencing with high delay，please contact the development team to redeploy the website.
+- If the live deployment site displays error messages, please check for internet connection and try refreshing the page.
+- If the live deployment site is currently down or experiencing with high delay, please contact the development team to redeploy the website.
 - If the problem occurs, please follow the above guide to run the service locally.
 - Regarding dependency issues, please make sure Node.js has required version and run `npm install`.
 
